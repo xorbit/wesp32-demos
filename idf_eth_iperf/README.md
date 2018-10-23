@@ -9,25 +9,22 @@ Put this directory under `examples/ethernet` in your ESP-IDF installation.  Get 
 
 I recommend running `screen /dev/ttyUSB0 115200` (adjust the device as needed) to interact with the iperf command line on the wESP32 instead of `make monitor`, which seems to mess with the RTS and/or DTR lines used for auto programming and causes issues.
 
-It is recommended to run the iperf tests in combination with another host connected to Ethernet on the same network so as not to introduce bandwidth limitationscaused by the other side.
+It is recommended to run the iperf tests in combination with another host connected to Ethernet on the same network so as not to introduce bandwidth limitations caused by the other side.
 
 ## Iperf Example
 
 This example implements the protocol used by the common performance measurement tool [iPerf](https://iperf.fr/). 
-Performance can be measured between two ESP32s running this example, or between a single ESP32 and a computer running the iPerf tool
+Performance can be measured between two ESP32s running this example, or between a single ESP32 and a computer running the iPerf tool (recommended).
 
 Demo steps to test station TCP Tx performance: 
 
-1. Build the iperf example with sdkconfig.defaults, which contains performance test specific configurations
+1. Run iperf as server on other computer:
 
-2. Run the demo as station mode and join the target AP
-   sta ssid password
+   `iperf -s -i 3`
 
-3. Run iperf as server on AP side
-   iperf -s -i 3
+2. Run iperf as client on ESP32:
 
-4. Run iperf as client on ESP32 side
-   iperf -c 192.168.10.42 -i 3 -t 60
+   `iperf -c 192.168.10.42 -i 3 -t 60`
 
 The console output, which is printed by station TCP RX throughput test, looks like:
 
