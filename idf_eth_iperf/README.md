@@ -5,11 +5,11 @@ Ethernet instead.  It allowed me to test the throughput of the wESP32 Ethernet s
 
 ## How to build and use
 
-Put this directory under examples/ethernet in your ESP-IDF installation.  Get everything configured correctly to be able to build IDF examples according to the IDF instructions, then run `make` in this directory to build the code followed by `make flash` to program the wESP32.
+Put this directory under `examples/ethernet` in your ESP-IDF installation.  Get everything configured correctly to be able to build IDF examples according to the IDF instructions, then run `make` in this directory to build the code followed by `make flash` to program the wESP32.
 
 I recommend running `screen /dev/ttyUSB0 115200` (adjust the device as needed) to interact with the iperf command line on the wESP32 instead of `make monitor`, which seems to mess with the RTS and/or DTR lines used for auto programming and causes issues.
 
-It is recommended to run the iperf tests in combination with another host connected to Ethernet on the same network so as not to introduce limitations on the other side.
+It is recommended to run the iperf tests in combination with another host connected to Ethernet on the same network so as not to introduce bandwidth limitationscaused by the other side.
 
 ## Iperf Example
 
