@@ -1,0 +1,36 @@
+author: silicognition
+description: "wESP32 test"
+version: 1.0
+platform: esp32
+
+manifest_version: 2017-09-29
+libs_version: ${mos.version}
+modules_version: ${mos.version}
+mongoose_os_version: ${mos.version}
+
+tags:
+  - js
+
+filesystem:
+  - fs
+
+config_schema:
+  - ["eth.clk_mode", 0]
+  - ["eth.mdc_gpio", 16]
+  - ["eth.mdio_gpio", 17]
+  - ["eth.phy_addr", 0]
+  - ["eth.enable", true]
+  - ["wesp32_light", "o", {title: "wESP32 light test custom settings"}]
+  - ["wesp32_light.pin", "i", 23, {title: "Light output pin"}]
+
+libs:
+  - origin: https://github.com/mongoose-os-libs/ethernet
+  - origin: https://github.com/mongoose-os-libs/ca-bundle
+  - origin: https://github.com/mongoose-os-libs/rpc-service-config
+  - origin: https://github.com/mongoose-os-libs/rpc-service-fs
+  - origin: https://github.com/mongoose-os-libs/rpc-service-ota
+  - origin: https://github.com/mongoose-os-libs/rpc-uart
+  - origin: https://github.com/mongoose-os-libs/dash
+  - origin: https://github.com/mongoose-os-libs/sntp
+  - origin: https://github.com/mongoose-os-libs/mjs
+
