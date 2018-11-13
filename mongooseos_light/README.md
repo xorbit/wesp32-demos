@@ -42,3 +42,8 @@ The main program code of the demo lives in the `fs/init.js` file.  It uses Mongo
 
 The code first gets the pin definition for the LED and configures it as an output.  After that is a handler that deals with updating the LED and updating the cloud backend with the current state.  There is no main loop as the whole thing is properly event driven.
 
+## WARNING
+
+During my testing with Mongoose OS, I blew up the Ethernet phy on my wESP32.  I haven't tracked down the exact library that caused this issue, but it happened when I included the `js-demo-bundle` library in my `mos.yml` file.  Therefor, **DO NOT USE THIS LIBRARY WITH THE WESP32** and **DO NOT TRY ANY OF THE DEMOS THAT LOAD THIS LIBRARY WITH THE WESP32**.  The demo bundle library pulls in a whole slew of hardware driver libraries and my theory is that one of them reconfigures some pins of the ESP32 in a way that is damaging to the phy.
+
+I hope to have a more fine-grained idea of what the root cause of this is in the future, but for now, this is all I know about the issue.
