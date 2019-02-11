@@ -21,6 +21,6 @@ while lan.ifconfig()[0] == '0.0.0.0':
 # Install picoweb
 print("Network connection established, installing picoweb...")
 upip.install('picoweb')
-# Install micropython-logging
-upip.install('micropython-logging')
+# Install micropython-ulogging
+upip.install('micropython-ulogging')
 print("Installation finished.")
