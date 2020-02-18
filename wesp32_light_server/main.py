@@ -1,8 +1,8 @@
 import machine
 import network
-import picoweb
 import time
 import gc
+from microdot import Microdot, send_file
 
 # Connect to LAN if not already done by boot.py
 try:
@@ -19,49 +19,40 @@ ledpwm.freq(500)
 time.sleep(0.25)
 ledpwm.duty(0)
 
-# Picoweb instance
-app = picoweb.WebApp(__name__)
-
-# Parse a query string into a dictionary with key/value pairs
-def parse_query(qs):
-  if len(qs) > 0:
-    return dict([pair.split('=', 1) if '=' in pair else (pair, None)
-                  for pair in qs.split('&')])
-  else:
-    return {}
+# Microdot instance
+app = Microdot()
 
 # Home page
 @app.route("/")
-def index(req, resp):
-  yield from app.sendfile(resp, 'static/index.html', 'text/html')
-  yield from resp.aclose()
+def index(request):
+  return send_file('static/index.html')
+
+# Logo image
+@app.route("/static/wesp32-logo.jpg")
+def logo(request):
+  return send_file('static/wesp32-logo.jpg')
 
 # Update light
 @app.route("/light")
-def light(req, resp):
-  query = parse_query(req.qs)
-  if 'level' in query:
-    ledpwm.duty(int(query['level']))
-  yield from picoweb.start_response(resp, content_type = "text/plain")
-  yield from resp.awrite(str(ledpwm.duty()))
-  yield from resp.aclose()
+def light(request):
+  if 'level' in request.args:
+    ledpwm.duty(int(request.args['level']))
+  return str(ledpwm.duty())
 
 # Memory info
 @app.route("/memory")
-def light(req, resp):
-  query = parse_query(req.qs)
-  if 'gc' in query or 'collect' in query:
+def light(request):
+  if 'gc' in request.args or 'collect' in request.args:
+    print ("Garbage collect")
     gc.collect()
-  yield from picoweb.start_response(resp, content_type = "text/plain")
-  yield from resp.awrite(str(gc.mem_free()))
-  yield from resp.aclose()
+  return str(gc.mem_free())
 
 # Wait for network
 while lan.ifconfig()[0] == '0.0.0.0':
   print("Waiting for network connection...")
   time.sleep(2)
-print("Network connection established, starting Picoweb server.")
+print("Network connection established, starting Microdot server.")
 
-# Run Picoweb server
+# Run Microdot server
 app.run(host=lan.ifconfig()[0], port=80)
 

@@ -11,8 +11,8 @@ echo "Creating directory /static..."
 ampy -p $WESP32PORT mkdir static > /dev/null
 echo "Uploading index.html..."
 ampy -p $WESP32PORT put static/index.html static/index.html
-echo "Uploading wesp32-logo.png..."
-ampy -p $WESP32PORT put static/wesp32-logo.png static/wesp32-logo.png
+echo "Uploading wesp32-logo.jpg..."
+ampy -p $WESP32PORT put static/wesp32-logo.jpg static/wesp32-logo.jpg
 echo "Current LAN IP address of the wESP32:"
 ampy -p $WESP32PORT run get-ip.py
 echo "Resetting the wESP32..."

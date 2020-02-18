@@ -1,8 +1,8 @@
 # wESP32 MicroPython demo: dimmable LED light with built-in web UI
 
-**IMPORTANT NOTE:
-Due to a conflict between developer pfalcon and MicroPython, the Picoweb server used by this demo does not work with standard MicroPython, only with [pfalcon's Pycopy fork](https://github.com/pfalcon/pycopy).  Unfortunately, binary images for this fork are not available, so you can only use it if you compile your own image from source.
-This example repo contains the `wesp32_light_server_socket` demo that uses low level socket code to implement a simple web server that is not subject to the politics and whims of developers.**
+**NOTE:
+This demo used to use the Picoweb web server, but due to a conflict between developer pfalcon and MicroPython, the Picoweb package does not work anymore with standard MicroPython, only with [pfalcon's Pycopy fork](https://github.com/pfalcon/pycopy).  Unfortunately, binary images for this fork are not available, so you can only use it if you compile your own image from source.
+For this reason, the demo has been switched to the [Microdot web server](https://github.com/miguelgrinberg/microdot), which is an excellent replacement, though not as mature.**
 
 This demo provides example code for using [MicroPython](https://micropython.org/) on the wESP32.  It implements a web server that can be accessed to set the PWM level of the IO23 output.
 
@@ -18,7 +18,7 @@ All my development is done on [Ubuntu Linux](https://www.ubuntu.com/).  If you u
 
 All the helper scripts get their serial port setting from the `wesp32-port.sh` script, this makes it easy to adjust the serial port setting to your system by just editing this single file.
 
-Binaries for MicroPython to run this demo need to use [pfalcon's Pycopy fork of MicroPython](https://github.com/pfalcon/pycopy) that needs to be compiled from source.
+Binaries for MicroPython can be found on the [MicroPython download page](http://micropython.org/download).  Download a binary for the ESP32 platform with Ethernet support to use on the wESP32.
 
 To be able to flash the MicroPython image to the wESP32, you need to have [Espressif's esptool.py](https://github.com/espressif/esptool) installed.  This can be done by running:
 
@@ -64,7 +64,7 @@ Note that MicroPython comes pre-installed on the wESP32 from the factory, so on 
 
 ### Installing dependency modules
 
-This example uses the [picoweb](https://github.com/pfalcon/picoweb) micro-framework as the web server.  Picoweb and a logging module it depends on first need to be installed to make the example code work.  MicroPython provides the `upip` module that works similar to regular Python's `pip` tool for installing packages and their dependencies.  A script is provided to make this installation as simple as possible:
+This example uses the [Microdot](https://github.com/miguelgrinberg/microdot) micro-framework as the web server.  This module need to be installed first to make the example code work.  MicroPython provides the `upip` module that works similar to regular Python's `pip` tool for installing packages and their dependencies.  A script is provided to make this installation as simple as possible:
 
 ```sh
 ./install-modules.sh
@@ -94,7 +94,7 @@ Some other helper scripts are provided that can make your life easier:
 
 The first thing the code does after loading modules is test whether `boot.py` already set up the Ethernet system.  If not, it takes care of doing that.  Then the IO23 pin is configured as a PWM output and blinks for 1/4 s.  This is followed by a simple function that turns a query string into a dictionary.
 
-The picoweb app object is created and route handlers are added.  The root `/` route just sends the `index.html` file to the client.  The `wesp32-logo.png` image is automatically handled by picoweb because it is in the `/static` directory and the HTML references it under the `/static` route, so we don't need to do anything to make that work.  Next we define a `/light` endpoint, it returns the current light level but also sets the light level if a `level` query parameter is specified.  This is used by the web page to control the light level by using the slider.  The last route is for the `/memory` endpoint, it returns the amount of free memory and can be used to observe the behavior of the garbage collector, you can also trigger garbage collection by specifying a `gc` or `collect` query parameter.
+The Microdot app object is created and route handlers are added.  The root `/` route just sends the `index.html` file to the client.  The `wesp32-logo.jpg` image is not automatically handled by Microdot as it was with Picoweb, so we need to provide a handler for it.  Next we define a `/light` endpoint, it returns the current light level but also sets the light level if a `level` query parameter is specified.  This is used by the web page to control the light level by using the slider.  The last route is for the `/memory` endpoint, it returns the amount of free memory and can be used to observe the behavior of the garbage collector, you can also trigger garbage collection by specifying a `gc=1` or `collect=1` query parameter.
 
-After defining all the endpoints, we wait for the wESP32 to receive an IP address so we can pass it to the `run` call that starts the picoweb server on port 80 where you can access it from your browser.
+After defining all the endpoints, we wait for the wESP32 to receive an IP address so we can pass it to the `run` call that starts the Microdot server on port 80 where you can access it from your browser.
 

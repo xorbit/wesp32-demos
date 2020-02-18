@@ -18,9 +18,8 @@ while lan.ifconfig()[0] == '0.0.0.0':
   print("Waiting for network connection...")
   time.sleep(2)
 
-# Install picoweb
-print("Network connection established, installing picoweb...")
-upip.install('picoweb')
-# Install micropython-ulogging
-upip.install('micropython-ulogging')
+# Install microdot
+print("Network connection established, installing microdot...")
+upip.install('microdot')
 print("Installation finished.")
+
