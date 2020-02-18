@@ -1,5 +1,9 @@
 # wESP32 MicroPython demo: dimmable LED light with built-in web UI
 
+**IMPORTANT NOTE:
+Due to a conflict between developer pfalcon and MicroPython, the Picoweb server used by this demo does not work with standard MicroPython, only with [pfalcon's Pycopy fork](https://github.com/pfalcon/pycopy).  Unfortunately, binary images for this fork are not available, so you can only use it if you compile your own image from source.
+This example repo contains the `wesp32_light_server_socket` demo that uses low level socket code to implement a simple web server that is not subject to the politics and whims of developers.**
+
 This demo provides example code for using [MicroPython](https://micropython.org/) on the wESP32.  It implements a web server that can be accessed to set the PWM level of the IO23 output.
 
 Various scripts are provided to simplify some of the complexities that come with using a powerful firmware like MicroPython.  Note that error handling in these scripts is minimal, this is done to keep them clear so they can be used to learn how each operation works.  And because I'm lazy. :)
@@ -14,7 +18,7 @@ All my development is done on [Ubuntu Linux](https://www.ubuntu.com/).  If you u
 
 All the helper scripts get their serial port setting from the `wesp32-port.sh` script, this makes it easy to adjust the serial port setting to your system by just editing this single file.
 
-Binaries for MicroPython can be found on the [MicroPython download page](http://micropython.org/download).  Download a binary for the ESP32 platform to use on the wESP32.
+Binaries for MicroPython to run this demo need to use [pfalcon's Pycopy fork of MicroPython](https://github.com/pfalcon/pycopy) that needs to be compiled from source.
 
 To be able to flash the MicroPython image to the wESP32, you need to have [Espressif's esptool.py](https://github.com/espressif/esptool) installed.  This can be done by running:
 
@@ -55,6 +59,8 @@ A helper script is provided to install a MicroPython image to the wESP32.  Just 
 Replace the placeholder with the name of your downloaded MicroPython image.
 
 The script not only flashes MicroPython to the wESP32 but it also updates the `boot.py` file to automatically configure the ESP32 networking subsystem correctly for the wESP32.  This makes it so your own scripts don't even need to bother to do anything to get the LAN connected!  You can just access the `lan` variable to interact with the `LAN` object and get useful information such as the IP address.
+
+Note that MicroPython comes pre-installed on the wESP32 from the factory, so on a new unit you can skip this step!
 
 ### Installing dependency modules
 
