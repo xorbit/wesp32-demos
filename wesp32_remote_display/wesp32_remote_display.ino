@@ -65,24 +65,24 @@ void TFTMessage(String message) {
 void handleEvent(WiFiEvent_t event){
   String message;
   switch(event) {
-    case SYSTEM_EVENT_ETH_START:
+    case ARDUINO_EVENT_ETH_START:
       ETH.setHostname("wesp32");
       Serial.println("ETH started");
       Serial.print("ETH MAC: ");
       Serial.println(ETH.macAddress());
       break;
-    case SYSTEM_EVENT_ETH_CONNECTED:
+    case ARDUINO_EVENT_ETH_CONNECTED:
       Serial.println("ETH connected");
       TFTMessage("Ethernet connected\nWaiting for IP...");
       break;
-    case SYSTEM_EVENT_ETH_GOT_IP:
+    case ARDUINO_EVENT_ETH_GOT_IP:
       Serial.print("ETH IPv4: ");
       Serial.println(ETH.localIP());
       TFTMessage("Ethernet connected");
       tft.print("IP address: ");
       tft.println(ETH.localIP());
       break;
-    case SYSTEM_EVENT_ETH_DISCONNECTED:
+    case ARDUINO_EVENT_ETH_DISCONNECTED:
       Serial.println("ETH disconnected");
       TFTMessage("Waiting for Ethernet\nconnection...");
       break;
@@ -96,8 +96,8 @@ void setup(){
   Serial.begin(115200);
   // Attach the callback event handler
   WiFi.onEvent(handleEvent);
-  // Start the ethernet
-  ETH.begin();
+  // Start the ethernet (Arduino-ESP32 3.x on rev 7 hardware)
+  ETH.begin(ETH_PHY_RTL8201, 0, 16, 17, -1, ETH_CLOCK_GPIO0_IN);
 
   // Start the TFT display and initialize
   tft.begin(32000000);

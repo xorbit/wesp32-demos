@@ -4,7 +4,7 @@
    Based on Neil Kolban example for IDF: https://github.com/nkolban/esp32-snippets/blob/master/cpp_utils/tests/BLE%20Tests/SampleScan.cpp
 */
 
-#define POST_URL "http://10.10.10.225:5000/"
+#define POST_URL "http://192.168.1.131:5000/"
 #define SCAN_TIME  10 // seconds
 // Comment the follow line to disable serial message
 #define SERIAL_PRINT
@@ -32,8 +32,8 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks
 
 void setup()
 {
-  // Start the ethernet
-  ETH.begin();
+  // Start the ethernet (Arduino-ESP32 3.x on rev 7 hardware)
+  ETH.begin(ETH_PHY_RTL8201, 0, 16, 17, -1, ETH_CLOCK_GPIO0_IN);
   
 #ifdef SERIAL_PRINT
   Serial.begin(115200);
@@ -55,15 +55,15 @@ void loop()
   Serial.printf("Start BLE scan for %d seconds...\n", SCAN_TIME);
 #endif
 
-  BLEScanResults foundDevices = pBLEScan->start(SCAN_TIME);
-  int count = foundDevices.getCount();
+  BLEScanResults *foundDevices = pBLEScan->start(SCAN_TIME);
+  int count = foundDevices->getCount();
   String ss = "[";
   for (int i = 0; i < count; i++)
   {
     if (i > 0) {
       ss += ",";
     }
-    BLEAdvertisedDevice d = foundDevices.getDevice(i);
+    BLEAdvertisedDevice d = foundDevices->getDevice(i);
     ss += "{\"address\":\"";
     ss += d.getAddress().toString().c_str();
     ss += "\",\"rssi\":";
@@ -84,8 +84,8 @@ void loop()
 
     if (d.haveManufacturerData())
     {
-      std::string md = d.getManufacturerData();
-      uint8_t* mdp = (uint8_t*)d.getManufacturerData().data();
+      String md = d.getManufacturerData();
+      uint8_t *mdp = (uint8_t*)md.c_str();
       char *pHex = BLEUtils::buildHexData(nullptr, mdp, md.length());
       ss += ",\"mfgdata\":\"";
       ss += pHex;

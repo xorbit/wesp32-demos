@@ -62,19 +62,9 @@ The script not only flashes MicroPython to the wESP32 but it also updates the `b
 
 Note that MicroPython comes pre-installed on the wESP32 from the factory, so on a new unit you can skip this step!
 
-### Installing dependency modules
-
-This example uses the [Microdot](https://github.com/miguelgrinberg/microdot) micro-framework as the web server.  This module need to be installed first to make the example code work.  MicroPython provides the `upip` module that works similar to regular Python's `pip` tool for installing packages and their dependencies.  A script is provided to make this installation as simple as possible:
-
-```sh
-./install-modules.sh
-```
-
-This will use the `ampy` tool to run the `install-modules.py` script on the wESP32.  The `install-modules.py` waits for the network to be connected and uses `upip` to install the modules.  A network connection is required to make this work as `upip` downloads the package from the Internet.
-
 ### Uploading the application files
 
-Last we need to upload the files for the application to the wESP32.  This is automated with another script, so you can just run:
+We need to upload the files for the application to the wESP32.  This is automated with another script, so you can just run:
 
 ```sh
 ./upload-app.sh
@@ -94,7 +84,7 @@ Some other helper scripts are provided that can make your life easier:
 
 The first thing the code does after loading modules is test whether `boot.py` already set up the Ethernet system.  If not, it takes care of doing that.  Then the IO23 pin is configured as a PWM output and blinks for 1/4 s.  This is followed by a simple function that turns a query string into a dictionary.
 
-The Microdot app object is created and route handlers are added.  The root `/` route just sends the `index.html` file to the client.  The `wesp32-logo.jpg` image is not automatically handled by Microdot as it was with Picoweb, so we need to provide a handler for it.  Next we define a `/light` endpoint, it returns the current light level but also sets the light level if a `level` query parameter is specified.  This is used by the web page to control the light level by using the slider.  The last route is for the `/memory` endpoint, it returns the amount of free memory and can be used to observe the behavior of the garbage collector, you can also trigger garbage collection by specifying a `gc=1` or `collect=1` query parameter.
+The Microdot app object is created and route handlers are added.  The root `/` route just sends the `index.html` file to the client.  The `wesp32-logo.png` image is not automatically handled by Microdot as it was with Picoweb, so we need to provide a handler for it.  Next we define a `/light` endpoint, it returns the current light level but also sets the light level if a `level` query parameter is specified.  This is used by the web page to control the light level by using the slider.  The last route is for the `/memory` endpoint, it returns the amount of free memory and can be used to observe the behavior of the garbage collector, you can also trigger garbage collection by specifying a `gc=1` or `collect=1` query parameter.
 
 After defining all the endpoints, we wait for the wESP32 to receive an IP address so we can pass it to the `run` call that starts the Microdot server on port 80 where you can access it from your browser.
 

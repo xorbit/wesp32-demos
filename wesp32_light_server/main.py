@@ -2,14 +2,14 @@ import machine
 import network
 import time
 import gc
-from microdot import Microdot, send_file
+from microdot_asyncio import Microdot, send_file
 
 # Connect to LAN if not already done by boot.py
 try:
   lan
 except:
   lan = network.LAN(mdc = machine.Pin(16), mdio = machine.Pin(17),
-                    power = None, phy_type = network.PHY_LAN8720, phy_addr=0)
+                    power = None, phy_type = network.PHY_RTL8201, phy_addr=0)
   lan.active(1)
 
 # Initialize light PWM, flash for 1/4 sec on boot
@@ -24,24 +24,24 @@ app = Microdot()
 
 # Home page
 @app.route("/")
-def index(request):
+async def index(request):
   return send_file('static/index.html')
 
 # Logo image
-@app.route("/static/wesp32-logo.jpg")
-def logo(request):
-  return send_file('static/wesp32-logo.jpg')
+@app.route("/static/wesp32-logo.png")
+async def logo(request):
+  return send_file('static/wesp32-logo.png')
 
 # Update light
 @app.route("/light")
-def light(request):
+async def light(request):
   if 'level' in request.args:
     ledpwm.duty(int(request.args['level']))
   return str(ledpwm.duty())
 
 # Memory info
 @app.route("/memory")
-def light(request):
+async def memory(request):
   if 'gc' in request.args or 'collect' in request.args:
     print ("Garbage collect")
     gc.collect()

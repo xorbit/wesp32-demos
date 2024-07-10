@@ -1,6 +1,6 @@
 author: silicognition
 description: "wESP32 test"
-version: 1.0
+version: 1.1
 platform: esp32
 
 manifest_version: 2017-09-29
@@ -24,7 +24,7 @@ config_schema:
   - ["wesp32_light.pin", "i", 23, {title: "Light output pin"}]
 
 libs:
-  - origin: https://github.com/mongoose-os-libs/ethernet
+  - origin: https://github.com/xorbit/ethernet
   - origin: https://github.com/mongoose-os-libs/ca-bundle
   - origin: https://github.com/mongoose-os-libs/rpc-service-config
   - origin: https://github.com/mongoose-os-libs/rpc-service-fs
@@ -33,4 +33,13 @@ libs:
   - origin: https://github.com/mongoose-os-libs/dash
   - origin: https://github.com/mongoose-os-libs/sntp
   - origin: https://github.com/mongoose-os-libs/mjs
+
+conds:
+  - when: mos.platform == "esp32"
+    apply:
+      cdefs:
+        MGOS_ETH_PHY_LAN87x0: 0
+        MGOS_ETH_PHY_RTL8201: 1
+      build_vars:
+        APP_SLOT_SIZE: 0x190000
 
