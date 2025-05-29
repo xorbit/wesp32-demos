@@ -3,6 +3,10 @@
 This is not nice clean code.  This is ugly, hacked code that I adapted from the ESP-IDF WiFi iperf example to work with 
 Ethernet instead.  It allowed me to test the throughput of the wESP32 Ethernet subsystem and that was all I wanted from it.
 
+**NOTE: This is not needed any more since
+[ESP-IDF now contains Ethernet iperf example code](https://github.com/espressif/esp-idf/tree/master/examples/ethernet/iperf).
+I'm keeping it in here for now for posterity.**
+
 ## How to build and use
 
 Put this directory under `examples/ethernet` in your ESP-IDF installation.  Get everything configured correctly to be able to build IDF examples according to the IDF instructions, then run `make` in this directory to build the code followed by `make flash` to program the wESP32.

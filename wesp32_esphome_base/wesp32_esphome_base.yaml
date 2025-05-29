@@ -1,0 +1,15 @@
+esphome:
+  name: wesp32_esphome_base
+
+esp32:
+  board: wesp32
+  framework: 
+    type: esp-idf
+
+ethernet:
+  type: RTL8201
+  mdc_pin: GPIO16
+  mdio_pin: GPIO17
+  clk_mode: GPIO0_IN
+  phy_addr: 0
+
